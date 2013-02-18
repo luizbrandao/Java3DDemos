@@ -26,6 +26,7 @@ package br.com.j3d.exemplos;
 
 import javax.swing.*;
 import java.awt.*;
+
 import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.universe.*;
 import com.sun.j3d.utils.behaviors.vp.*;
@@ -160,8 +161,8 @@ public class GeometryExample extends JFrame {
 
 		Font3D font3d = new Font3D(new Font("Helvetica", Font.PLAIN, 1),
 				new FontExtrusion());
-		Text3D textGeom = new Text3D(font3d, new String("Geometria!"),
-				new Point3f(-1.0f, 0.0f, 0.0f));
+		Text3D textGeom = new Text3D(font3d, new String("Luiz!"),
+				new Point3f(1.0f, 0.0f, 0.0f));
 		Shape3D textShape = new Shape3D(textGeom);
 		textShape.setAppearance(app);
 
