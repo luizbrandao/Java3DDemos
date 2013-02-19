@@ -21,46 +21,39 @@ package br.com.j3d.exemplos;
 ///////////////////////////////////////////////////////////////////////////
 // Isabel Harb Manssour
 // Junho de 2003
-// LoaderExample.java ilustra como criar instâncias de modelos
-// pré-definidos.
+// ImageBackgroundApplication.java ilustra como criar backgrounds.
 // Este código está baseado no demo HelloUniverse.java
 
-import java.applet.Applet;
 import javax.swing.*;
-import java.net.URL;
 import java.awt.*;
-import java.io.*;
 import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.universe.*;
-import com.sun.j3d.utils.behaviors.vp.*;
-import com.sun.j3d.loaders.objectfile.ObjectFile;
-import com.sun.j3d.loaders.ParsingErrorException;
-import com.sun.j3d.loaders.IncorrectFormatException;
-import com.sun.j3d.loaders.Scene;
+import com.sun.j3d.utils.image.TextureLoader;
 import javax.media.j3d.*;
 import javax.vecmath.*;
 
-public class LoaderExample extends Applet {
+public class ImageBackgroundApplication extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	// /////////////////////////////////////////////////////////////////////
-	// Atributo da classe HelloUniverseBehavior
+	// Atributo da classe ImageBackgroundApplication
 	//
 	private SimpleUniverse universe = null;
 
 	// /////////////////////////////////////////////////////////////////////
-	// Método init da applet
+	// Construtor da classe ImageBackgroundApplication
 	//
-	public LoaderExample() {
-		setLayout(new BorderLayout());
+	public ImageBackgroundApplication() {
+		Container container = getContentPane();
+		container.setLayout(new BorderLayout());
 		GraphicsConfiguration config = SimpleUniverse
 				.getPreferredConfiguration();
 
 		Canvas3D canvas = new Canvas3D(config);
-		add("Center", canvas);
+		container.add("Center", canvas);
 
 		// Cria um sub-grafo de conteúdo
 		BranchGroup scene = criaGrafoDeCena();
@@ -69,22 +62,7 @@ public class LoaderExample extends Applet {
 		// O código abaixo faz com que a ViewPlatform seja movida
 		// um pouco para trás, para que os objetos possam ser
 		// visualizados
-		ViewingPlatform viewingPlatform = universe.getViewingPlatform();
-		viewingPlatform.setNominalViewingTransform();
-
-		// O código abaixo altera o field-of-view para
-		// permitir a visualização de todos objetos
-		View view = universe.getViewer().getView();
-		view.setFieldOfView(view.getFieldOfView() * 1.4);
-
-		// Adiciona "mouse behaviors" à "viewingPlatform"
-		// (equivale a trocar a posição do "observador virtual")
-		OrbitBehavior orbit = new OrbitBehavior(canvas,
-				OrbitBehavior.REVERSE_ALL);
-		BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0),
-				100.0);
-		orbit.setSchedulingBounds(bounds);
-		viewingPlatform.setViewPlatformBehavior(orbit);
+		universe.getViewingPlatform().setNominalViewingTransform();
 
 		// Anexa o sub-grafo no universo virtual
 		universe.addBranchGraph(scene);
@@ -103,7 +81,7 @@ public class LoaderExample extends Applet {
 
 		// Cria o nodo TransformGroup e permite que ele possa
 		// ser alterado em tempo de execução (TRANSFORM_WRITE).
-		// Depois, adiciona-o na raiz do grafo de cena.
+		// Depois, adiciona-o na raiz do grafo.
 		TransformGroup objTrans = new TransformGroup();
 		objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		objRaiz.addChild(objTrans);
@@ -112,54 +90,56 @@ public class LoaderExample extends Applet {
 		BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0),
 				100.0);
 
-		// Especifica um background azul e adiciona-o no grafo
-		Color3f bgColor = new Color3f(0.2f, 0.2f, 0.7f);
-		Background bg = new Background(bgColor);
+		// objeto para abrir imagens
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		TextureLoader texturaBg = new TextureLoader(
+				toolkit.getImage("C:\\Users\\Luiz\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\stone.png"), this);
+		Background bg = new Background(texturaBg.getImage());
 		bg.setApplicationBounds(bounds);
+		bg.setImageScaleMode(Background.SCALE_REPEAT);
 		objRaiz.addChild(bg);
 
 		// Especifica as luzes do "ambiente"
-
-		// Luz Ambiente
+		Color3f corLuz = new Color3f(0.9f, 0.9f, 0.9f);
+		Vector3f direcaoLuz = new Vector3f(0.0f, -0.8f, -1.0f);
 		Color3f corAmb = new Color3f(0.2f, 0.2f, 0.2f);
+
 		AmbientLight luzAmb = new AmbientLight(corAmb);
 		luzAmb.setInfluencingBounds(bounds);
+		DirectionalLight luzDir = new DirectionalLight(corLuz, direcaoLuz);
+		luzDir.setInfluencingBounds(bounds);
 		objRaiz.addChild(luzAmb);
+		objRaiz.addChild(luzDir);
 
-		// Luz Pontual (Color3f c, Point3f position, Point3f attenuation)
-		Color3f corLuz = new Color3f(0.9f, 0.9f, 0.9f);
-		Point3f posicaoLuz1 = new Point3f(0.6f, 2.0f, 0.2f);
-		Point3f posicaoLuz2 = new Point3f(-0.6f, 2.0f, -0.2f);
-		Point3f atenuacaoLuz = new Point3f(0.1f, 0.1f, 0.1f);
-		PointLight luzPont = new PointLight(corLuz, posicaoLuz1, atenuacaoLuz);
-		luzPont.setInfluencingBounds(bounds);
-		objRaiz.addChild(luzPont);
-		PointLight luzPont2 = new PointLight(corLuz, posicaoLuz2, atenuacaoLuz);
-		luzPont2.setInfluencingBounds(bounds);
-		objRaiz.addChild(luzPont2);
+		Appearance app = new Appearance();
+		Material material = new Material(new Color3f(0.9f, 0.1f, 0.1f),
+				new Color3f(0.0f, 0.0f, 0.0f), new Color3f(0.9f, 0.1f, 0.1f),
+				new Color3f(1.0f, 1.0f, 1.0f), 60.0f);
+		app.setMaterial(material);
 
-		ObjectFile f = new ObjectFile(ObjectFile.RESIZE,
-				(float) (60.0 * Math.PI / 180.0));
-		Scene s = null;
+		Sphere esfera = new Sphere(0.4f, 1, 40);
+		esfera.setAppearance(app);
 
-		try {
-			s = f.load(new java.net.URL(getCodeBase().toString()
-					+ "./galleon.obj"));
-		} catch (FileNotFoundException e) {
-			System.err.println(e);
-			System.exit(1);
-		} catch (ParsingErrorException e) {
-			System.err.println(e);
-			System.exit(1);
-		} catch (IncorrectFormatException e) {
-			System.err.println(e);
-			System.exit(1);
-		} catch (java.net.MalformedURLException ex) {
-			System.out.println(ex.getMessage());
-			System.exit(1);
-		}
+		objTrans.addChild(esfera);
 
-		objRaiz.addChild(s.getSceneGroup());
+		// Cria outro nodo TransformGroup node e permite que ele possa
+		// ser alterado em tempo de execução (TRANSFORM_WRITE).
+		// Depois, adiciona-o na raiz do grafo.
+		TransformGroup textTrans = new TransformGroup();
+		textTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		objRaiz.addChild(textTrans);
+
+		// Cria um novo objeto que irá aplicar as transformações
+		// geométricas sobre texto e o adicina no grafo.
+		Transform3D trans = new Transform3D();
+		trans.setTranslation(new Vector3d(-0.4, 0.6, 0.0));
+		textTrans.setTransform(trans);
+
+		// Text2D (java.lang.String text, Color3f color,
+		// java.lang.String fontName, int fontSize, int fontStyle)
+		Text2D text2D = new Text2D("E S F E R A !!", new Color3f(0.9f, 0.1f,
+				0.1f), "Helvetica", 30, Font.BOLD);
+		textTrans.addChild(text2D);
 
 		// Para o Java 3D realizar otimizações no grafo de cena
 		objRaiz.compile();
@@ -167,7 +147,10 @@ public class LoaderExample extends Applet {
 		return objRaiz;
 	}
 
+	// /////////////////////////////////////////////////////////////////////
+	// Método principal que permite executar a aplicação
+	//
 	public static void main(String[] args) {
-		new LoaderExample();
+		new ImageBackgroundApplication();
 	}
 }
