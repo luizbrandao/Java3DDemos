@@ -96,6 +96,9 @@ public class LoaderExample extends Applet {
 	// /////////////////////////////////////////////////////////////////////
 	// Método responsável pela criação do grafo de cena (ou sub-grafo)
 	//
+	/**
+	 * @return
+	 */
 	public BranchGroup criaGrafoDeCena() {
 
 		// Cria o nodo raiz
@@ -142,7 +145,8 @@ public class LoaderExample extends Applet {
 		Scene s = null;
 
 		try {
-			s = f.load(new java.net.URL(getCodeBase().toString()+ "C:\\Users\\Luiz\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\galleon.obj"));
+			s = f.load(new java.net.URL(getCodeBase().toString() + "C:\\Users\\Luiz\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\galleon.obj"));
+			//s = f.load("C:\\Users\\Luiz Brandão\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\TEAPOT.obj");
 		} catch (FileNotFoundException e) {
 			System.err.println(e);
 			System.exit(1);
