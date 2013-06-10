@@ -13,9 +13,7 @@ public class PictureBall {
 		Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
 		Color3f white = new Color3f(1.0f, 1.0f, 1.0f);
 		Color3f red = new Color3f(0.7f, .15f, .15f);
-		TextureLoader loader = new TextureLoader(
-				"C:\\Users\\Luiz\\Desktop\\JavaSimples\\earth.jpg",
-				new Container());
+		TextureLoader loader = new TextureLoader("C:\\Users\\Luiz Brandão\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\stone.jpg", new Container());
 		Texture texture = loader.getTexture();
 		texture.setBoundaryModeS(Texture.WRAP);
 		texture.setBoundaryModeT(Texture.WRAP);
@@ -28,8 +26,7 @@ public class PictureBall {
 		ap.setTextureAttributes(texAttr);
 		ap.setMaterial(new Material(red, black, white, black, 1.0f));
 
-		int primflags = Primitive.GENERATE_NORMALS
-				+ Primitive.GENERATE_TEXTURE_COORDS;
+		int primflags = Primitive.GENERATE_NORMALS+Primitive.GENERATE_TEXTURE_COORDS;
 		Sphere sphere = new Sphere(0.5f, primflags, ap);
 		group.addChild(sphere);
 

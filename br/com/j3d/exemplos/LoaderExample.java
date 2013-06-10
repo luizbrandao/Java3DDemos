@@ -26,11 +26,11 @@ package br.com.j3d.exemplos;
 // Este código está baseado no demo HelloUniverse.java
 
 import java.applet.Applet;
-import javax.swing.*;
-import java.net.URL;
+//import javax.swing.*;
+//import java.net.URL;
 import java.awt.*;
 import java.io.*;
-import com.sun.j3d.utils.geometry.*;
+//import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.universe.*;
 import com.sun.j3d.utils.behaviors.vp.*;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
@@ -46,14 +46,14 @@ public class LoaderExample extends Applet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	// /////////////////////////////////////////////////////////////////////
-	// Atributo da classe HelloUniverseBehavior
-	//
+	///////////////////////////////////////////////
+	// Atributo da classe HelloUniverseBehavior //
+	/////////////////////////////////////////////
 	private SimpleUniverse universe = null;
 
-	// /////////////////////////////////////////////////////////////////////
-	// Método init da applet
-	//
+	////////////////////////////
+	// Método init da applet //
+	//////////////////////////
 	public LoaderExample() {
 		setLayout(new BorderLayout());
 		GraphicsConfiguration config = SimpleUniverse
@@ -93,9 +93,9 @@ public class LoaderExample extends Applet {
 		setVisible(true);
 	}
 
-	// /////////////////////////////////////////////////////////////////////
-	// Método responsável pela criação do grafo de cena (ou sub-grafo)
-	//
+	///////////////////////////////////////////////////////////////////////
+	// Método responsável pela criação do grafo de cena (ou sub-grafo) ///
+	/////////////////////////////////////////////////////////////////////
 	/**
 	 * @return
 	 */
@@ -146,7 +146,6 @@ public class LoaderExample extends Applet {
 
 		try {
 			s = f.load(new java.net.URL(getCodeBase().toString() + "C:\\Users\\Luiz\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\galleon.obj"));
-			//s = f.load("C:\\Users\\Luiz Brandão\\workspace\\JavaSimples\\br\\com\\j3d\\exemplos\\TEAPOT.obj");
 		} catch (FileNotFoundException e) {
 			System.err.println(e);
 			System.exit(1);
